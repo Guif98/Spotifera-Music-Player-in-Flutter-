@@ -1,8 +1,14 @@
+import 'dart:async';
+
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 class MusicApp extends StatefulWidget {
+  String song_name, artist_name, audio_url, image_url;
+
+  MusicApp({this.song_name, this.artist_name, this.audio_url, this.image_url});
+
   @override
   _MusicAppState createState() => _MusicAppState();
 }
@@ -10,9 +16,30 @@ class MusicApp extends StatefulWidget {
 class _MusicAppState extends State<MusicApp> {
   bool playing = false;
   IconData playBtn = Icons.play_circle_fill;
+  int songIndex = 0;
 
-  AudioPlayer _player;
-  AudioCache cache;
+  AudioPlayer audioPlayer;
+  AudioCache audioCache;
+
+  void getAudio() async {
+    var url = widget.audio_url;
+
+    if (playing) {
+      var res = await audioPlayer.pause();
+      if (res == 1) {
+        setState(() {
+          playing = false;
+        });
+      }
+    } else {
+      var res = await audioPlayer.play(url);
+      if (res == 1) {
+        setState(() {
+          playing = true;
+        });
+      }
+    }
+  }
 
   Duration position = new Duration();
   Duration musicLength = new Duration();
@@ -26,9 +53,7 @@ class _MusicAppState extends State<MusicApp> {
         value: position.inSeconds.toDouble(),
         max: musicLength.inSeconds.toDouble(),
         onChanged: (value) {
-          seekToSec(
-            value.toInt(),
-          );
+          seekToSec(value.toInt());
         },
       ),
     );
@@ -36,49 +61,48 @@ class _MusicAppState extends State<MusicApp> {
 
   void seekToSec(int sec) {
     Duration newPos = Duration(seconds: sec);
-    _player.seek(newPos);
+    audioPlayer.seek(newPos);
   }
 
   @override
   void initState() {
     super.initState();
-    _player = AudioPlayer();
-    cache = AudioCache(fixedPlayer: _player);
+    audioPlayer = AudioPlayer();
+    audioCache = AudioCache(fixedPlayer: audioPlayer);
 
-    _player.onDurationChanged.listen(
-      (Duration d) {
-        print('Max duration: $d');
-        setState(() => musicLength = d);
-      },
-    );
+    audioPlayer.onDurationChanged.listen((d) {
+      setState(() {
+        musicLength = d;
+      });
+    });
 
-    _player.onAudioPositionChanged.listen(
-      (Duration p) {
-        setState(
-          () => position = p,
-        );
-      },
-    );
-
-    cache.load("audios/Kick_the_earth.mp3");
+    audioPlayer.onAudioPositionChanged.listen((p) {
+      setState(() {
+        position = p;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 40.0,
+        iconTheme: IconThemeData(
+          color: Colors.deepPurple,
+        ),
+        actionsIconTheme: IconThemeData(
+          color: Colors.deepPurple,
+        ),
         actions: [
           IconButton(
             onPressed: () {
               Navigator.of(context).pushNamed('/browser');
             },
-            icon: Icon(
-              Icons.arrow_drop_down_circle_outlined,
-              color: Colors.white,
-            ),
+            icon: Icon(Icons.home),
           ),
         ],
+        backgroundColor: Colors.white,
+        toolbarHeight: 40.0,
       ),
       body: Container(
         width: double.infinity,
@@ -103,7 +127,7 @@ class _MusicAppState extends State<MusicApp> {
                 Padding(
                   padding: const EdgeInsets.only(right: 20),
                   child: Text(
-                    "Music Now",
+                    "SpotiFera",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 32.0,
@@ -123,26 +147,26 @@ class _MusicAppState extends State<MusicApp> {
                   ),
                 ),
                 SizedBox(
-                  height: 24.0,
+                  height: 44.0,
                 ),
                 Center(
                   child: Container(
-                    width: 220.0,
-                    height: 220.0,
+                    width: 200.0,
+                    height: 200.0,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30.0),
                       image: DecorationImage(
-                        image: AssetImage("assets/naruto_ultimate.jpg"),
+                        image: NetworkImage(widget.image_url.toString()),
                       ),
+                      borderRadius: BorderRadius.circular(30.0),
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 18.0,
+                  height: 10.0,
                 ),
                 Center(
                   child: Text(
-                    "Kick the Earth",
+                    widget.song_name,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,
@@ -151,7 +175,20 @@ class _MusicAppState extends State<MusicApp> {
                   ),
                 ),
                 SizedBox(
-                  height: 30.0,
+                  height: 10.0,
+                ),
+                Center(
+                  child: Text(
+                    widget.artist_name,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20.0,
                 ),
                 Expanded(
                   child: Container(
@@ -167,7 +204,7 @@ class _MusicAppState extends State<MusicApp> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          width: 500.0,
+                          width: double.infinity,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -188,49 +225,44 @@ class _MusicAppState extends State<MusicApp> {
                             ],
                           ),
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              iconSize: 45.0,
-                              color: Colors.deepPurple,
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.skip_previous,
+                        Container(
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.skip_previous_sharp,
+                                ),
+                                iconSize: 40.0,
+                                color: Colors.deepPurple,
                               ),
-                            ),
-                            IconButton(
-                              iconSize: 60.0,
-                              color: Colors.deepPurple[600],
-                              onPressed: () {
-                                if (!playing) {
-                                  cache.play("naruto_opening.mp3");
-                                  setState(() {
-                                    playBtn = Icons.pause_circle_filled;
-                                    playing = true;
-                                  });
-                                } else {
-                                  _player.pause();
-                                  setState(() {
-                                    playBtn = Icons.play_circle_fill;
-                                    playing = false;
-                                  });
-                                }
-                              },
-                              icon: Icon(
-                                playBtn,
+                              InkWell(
+                                onTap: () {
+                                  getAudio();
+                                },
+                                child: Icon(
+                                  playing == false
+                                      ? Icons.play_circle_fill
+                                      : Icons.pause_circle_filled,
+                                  size: 60.0,
+                                  color: Colors.deepPurple,
+                                ),
                               ),
-                            ),
-                            IconButton(
-                              iconSize: 45.0,
-                              color: Colors.deepPurple,
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.skip_next,
+                              IconButton(
+                                icon: Icon(
+                                  Icons.skip_next_sharp,
+                                ),
+                                iconSize: 40.0,
+                                color: Colors.deepPurple,
+                                onPressed: () {
+                                  print(widget.audio_url);
+                                },
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),

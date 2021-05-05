@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:muisc_player/music_app.dart';
 
 class BrowserPage extends StatefulWidget {
   @override
@@ -7,82 +9,114 @@ class BrowserPage extends StatefulWidget {
 }
 
 class _BrowserPageState extends State<BrowserPage> {
+  Future getData() async {
+    QuerySnapshot query =
+        await Firestore.instance.collection('audios').getDocuments();
+    return query.documents;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.audiotrack_sharp)),
-        ],
-      ),
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Colors.deepPurple[800],
-                Colors.deepPurple[200],
-              ]),
-        ),
-        child: ListView(
-          children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed('/');
-              },
-              child: Row(
-                children: [
-                  Column(
-                    children: [
-                      Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage("assets/naruto_ultimate.jpg"),
-                          ),
+    return FutureBuilder(
+      future: getData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              iconTheme: IconThemeData(
+                color: Colors.deepPurple,
+              ),
+              toolbarHeight: 40.0,
+              backgroundColor: Colors.white,
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/upload');
+                  },
+                  icon: Icon(Icons.add_to_photos_rounded),
+                ),
+              ],
+            ),
+            body: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.deepPurple[800],
+                    Colors.deepPurple[200],
+                  ],
+                ),
+              ),
+              child: ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MusicApp(
+                                song_name:
+                                    snapshot.data[index].data["song_name"],
+                                artist_name:
+                                    snapshot.data[index].data["artist_name"],
+                                audio_url:
+                                    snapshot.data[index].data["audio_url"],
+                                image_url:
+                                    snapshot.data[index].data["image_url"],
+                              ),
+                            ),
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            Column(
+                              children: [
+                                Image.network(
+                                  snapshot.data[index].data["image_url"],
+                                  width: 80,
+                                  height: 80,
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 10.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    snapshot.data[index].data["song_name"],
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    snapshot.data[index].data["artist_name"],
+                                    style: TextStyle(
+                                      fontSize: 10.0,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Kick the Earth',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Naruto Ultimate Ninja 4',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )
-                ],
-              ),
+                    );
+                  }),
             ),
-          ],
-        ),
-      ),
+          );
+        }
+      },
     );
   }
 }

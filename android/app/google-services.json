@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "835086100755",
+    "project_id": "spotifera-85fee",
+    "storage_bucket": "spotifera-85fee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:835086100755:android:f29434f06d15d4d30a92e6",
+        "android_client_info": {
+          "package_name": "com.example.muisc_player"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "835086100755-8hiv0tu1u5qqhagf1k3839pl1njtu2ft.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDocOqVlAFblQ5JpYdeswz-JnHH6OKBY0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "835086100755-8hiv0tu1u5qqhagf1k3839pl1njtu2ft.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
