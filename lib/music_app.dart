@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,6 @@ class _MusicAppState extends State<MusicApp> {
 
   void getAudio() async {
     var url = widget.audio_url;
-
     if (playing) {
       var res = await audioPlayer.pause();
       if (res == 1) {
@@ -46,7 +44,7 @@ class _MusicAppState extends State<MusicApp> {
 
   Widget slider() {
     return Container(
-      width: 260.0,
+      width: 300.0,
       child: Slider.adaptive(
         activeColor: Colors.deepPurple[900],
         inactiveColor: Colors.grey[600],
@@ -87,6 +85,7 @@ class _MusicAppState extends State<MusicApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         iconTheme: IconThemeData(
           color: Colors.deepPurple,
         ),
@@ -96,13 +95,13 @@ class _MusicAppState extends State<MusicApp> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed('/browser');
+              Navigator.pop(context);
             },
             icon: Icon(Icons.home),
           ),
         ],
         backgroundColor: Colors.white,
-        toolbarHeight: 40.0,
+        toolbarHeight: 50.0,
       ),
       body: Container(
         width: double.infinity,
@@ -147,29 +146,27 @@ class _MusicAppState extends State<MusicApp> {
                   ),
                 ),
                 SizedBox(
-                  height: 44.0,
+                  height: 100.0,
                 ),
                 Center(
                   child: Container(
-                    width: 200.0,
-                    height: 200.0,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(widget.image_url.toString()),
-                      ),
-                      borderRadius: BorderRadius.circular(30.0),
+                    width: 250.0,
+                    height: 250.0,
+                    child: FittedBox(
+                      fit: BoxFit.cover,
+                      child: Image.network(widget.image_url),
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 10.0,
+                  height: 60.0,
                 ),
                 Center(
                   child: Text(
                     widget.song_name,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18.0,
+                      fontSize: 26.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -182,13 +179,13 @@ class _MusicAppState extends State<MusicApp> {
                     widget.artist_name,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 12.0,
+                      fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 20.0,
+                  height: 50.0,
                 ),
                 Expanded(
                   child: Container(
@@ -231,13 +228,16 @@ class _MusicAppState extends State<MusicApp> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.skip_previous_sharp,
+                              Padding(
+                                padding: EdgeInsets.only(right: 20.0),
+                                child: IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.skip_previous_sharp,
+                                  ),
+                                  iconSize: 40.0,
+                                  color: Colors.deepPurple,
                                 ),
-                                iconSize: 40.0,
-                                color: Colors.deepPurple,
                               ),
                               InkWell(
                                 onTap: () {
@@ -251,15 +251,16 @@ class _MusicAppState extends State<MusicApp> {
                                   color: Colors.deepPurple,
                                 ),
                               ),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.skip_next_sharp,
+                              Padding(
+                                padding: EdgeInsets.only(left: 20.0),
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.skip_next_sharp,
+                                  ),
+                                  iconSize: 40.0,
+                                  color: Colors.deepPurple,
+                                  onPressed: () {},
                                 ),
-                                iconSize: 40.0,
-                                color: Colors.deepPurple,
-                                onPressed: () {
-                                  print(widget.audio_url);
-                                },
                               ),
                             ],
                           ),

@@ -73,59 +73,129 @@ class _UploadMusicState extends State<UploadMusic> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.deepPurple,
+        ),
         backgroundColor: Colors.white,
         actionsIconTheme: IconThemeData(
           color: Colors.deepPurple,
         ),
+        toolbarHeight: 40,
       ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 40),
-            child: Column(
-              children: <Widget>[
-                ElevatedButton(
-                  onPressed: () => selectImage(),
-                  child: Text("Selecione a capa"),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 12.0),
-                  child: ElevatedButton(
-                    onPressed: () => selectSong(),
-                    child: Text("Selecione a música"),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30.0),
-                  child: Container(
-                    width: 300,
-                    child: TextField(
-                      controller: songname,
-                      decoration: InputDecoration(hintText: "Nome da música"),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30.0),
-                  child: Container(
-                    width: 300,
-                    child: TextField(
-                      controller: artistname,
-                      decoration: InputDecoration(hintText: "Nome do artista"),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30.0),
-                  child: ElevatedButton(
-                    onPressed: () => finalUpload(),
-                    child: Text('Salvar'),
-                  ),
-                ),
-              ],
-            ),
+      body: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.deepPurple[800],
+              Colors.deepPurple[200],
+            ],
           ),
-        ],
+        ),
+        child: ListView(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 40),
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    width: 300.0,
+                    height: 80.0,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
+                      ),
+                      onPressed: () => selectImage(),
+                      child: Text(
+                        "Selecione a capa",
+                        style: TextStyle(
+                          color: Colors.deepPurple,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 12.0),
+                    child: SizedBox(
+                      width: 300.0,
+                      height: 80.0,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(primary: Colors.white),
+                        onPressed: () => selectSong(),
+                        child: Text(
+                          "Selecione a música",
+                          style: TextStyle(
+                            color: Colors.deepPurple,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 30.0),
+                    child: Container(
+                      width: 300,
+                      child: TextField(
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                        controller: songname,
+                        decoration: InputDecoration(
+                          labelText: 'Nome da música:',
+                          labelStyle: TextStyle(
+                            color: Colors.white,
+                          ),
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 30.0),
+                    child: Container(
+                      width: 300,
+                      child: TextField(
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        controller: artistname,
+                        decoration: InputDecoration(
+                          labelText: 'Nome do artista',
+                          labelStyle: TextStyle(
+                            color: Colors.white,
+                          ),
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 30.0),
+                    child: SizedBox(
+                      width: 300.0,
+                      height: 80.0,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.white,
+                        ),
+                        onPressed: () => finalUpload(),
+                        child: Text(
+                          'Salvar',
+                          style: TextStyle(
+                            color: Colors.deepPurple,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

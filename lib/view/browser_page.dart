@@ -27,10 +27,14 @@ class _BrowserPageState extends State<BrowserPage> {
         } else {
           return Scaffold(
             appBar: AppBar(
+              automaticallyImplyLeading: false,
               iconTheme: IconThemeData(
                 color: Colors.deepPurple,
               ),
-              toolbarHeight: 40.0,
+              actionsIconTheme: IconThemeData(
+                color: Colors.deepPurple,
+              ),
+              toolbarHeight: 50.0,
               backgroundColor: Colors.white,
               actions: [
                 IconButton(
@@ -38,6 +42,7 @@ class _BrowserPageState extends State<BrowserPage> {
                     Navigator.of(context).pushNamed('/upload');
                   },
                   icon: Icon(Icons.add_to_photos_rounded),
+                  color: Colors.deepPurple,
                 ),
               ],
             ),
@@ -78,10 +83,15 @@ class _BrowserPageState extends State<BrowserPage> {
                           children: [
                             Column(
                               children: [
-                                Image.network(
-                                  snapshot.data[index].data["image_url"],
-                                  width: 80,
-                                  height: 80,
+                                Container(
+                                  width: 150,
+                                  height: 150,
+                                  child: FittedBox(
+                                    fit: BoxFit.fill,
+                                    child: Image.network(
+                                      snapshot.data[index].data["image_url"],
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -92,7 +102,7 @@ class _BrowserPageState extends State<BrowserPage> {
                                   Text(
                                     snapshot.data[index].data["song_name"],
                                     style: TextStyle(
-                                      fontSize: 15.0,
+                                      fontSize: 20.0,
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
