@@ -30,6 +30,10 @@ dependencies:
   file_picker: ^1.9.0+1
   cloud_firestore: ^0.13.5
   firebase_storage: ^3.1.5
+  shared_preferences: any
+  flutter_file_manager: ^0.2.0
+  path: 1.8.0
+
 
 
 

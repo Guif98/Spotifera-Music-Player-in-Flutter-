@@ -1,6 +1,6 @@
-import 'dart:async';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class MusicApp extends StatefulWidget {
@@ -33,6 +33,7 @@ class _MusicAppState extends State<MusicApp> {
       var res = await audioPlayer.play(url);
       if (res == 1) {
         setState(() {
+          audioCache.play(url);
           playing = true;
         });
       }

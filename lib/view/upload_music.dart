@@ -71,6 +71,12 @@ class _UploadMusicState extends State<UploadMusic> {
 
   @override
   Widget build(BuildContext context) {
+    final audioFileName =
+        audio_down_url != null ? basename(audiopath) : 'No file selected!';
+
+    final imageFileName =
+        image_down_url != null ? basename(imagepath) : 'No file Selected';
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -114,6 +120,12 @@ class _UploadMusicState extends State<UploadMusic> {
                       ),
                     ),
                   ),
+                  Text(
+                    imageFileName,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                   Padding(
                     padding: EdgeInsets.only(top: 12.0),
                     child: SizedBox(
@@ -129,6 +141,12 @@ class _UploadMusicState extends State<UploadMusic> {
                           ),
                         ),
                       ),
+                    ),
+                  ),
+                  Text(
+                    audioFileName,
+                    style: TextStyle(
+                      color: Colors.white,
                     ),
                   ),
                   Padding(
@@ -157,6 +175,7 @@ class _UploadMusicState extends State<UploadMusic> {
                     child: Container(
                       width: 300,
                       child: TextField(
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
