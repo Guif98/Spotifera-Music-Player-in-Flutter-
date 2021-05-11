@@ -60,14 +60,17 @@ class _UploadMusicState extends State<UploadMusic> {
     audio_down_url = await (await uploadTask.onComplete).ref.getDownloadURL();
   }
 
+  // ignore: unused_element
   finalUpload() {
-    var data = {
-      "song_name": songname.text,
-      "artist_name": artistname.text,
-      "audio_url": audio_down_url.toString(),
-      "image_url": image_down_url.toString(),
-    };
-    firestoreInstance.collection("audios").document().setData(data);
+    if (audio_down_url != null || image_down_url != null) {
+      var data = {
+        "song_name": songname.text,
+        "artist_name": artistname.text,
+        "audio_url": audio_down_url.toString(),
+        "image_url": image_down_url.toString(),
+      };
+      firestoreInstance.collection("audios").document().setData(data);
+    } else {}
   }
 
   @override
@@ -76,7 +79,7 @@ class _UploadMusicState extends State<UploadMusic> {
         audio_down_url != null ? basename(audiopath) : 'No file selected!';
 
     final imageFileName =
-        image_down_url != null ? basename(imagepath) : 'No file Selected';
+        image_down_url != null ? basename(imagepath) : 'No file Selected!';
 
     return Scaffold(
       appBar: AppBar(
