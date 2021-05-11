@@ -13,6 +13,8 @@ class UploadMusic extends StatefulWidget {
 }
 
 class _UploadMusicState extends State<UploadMusic> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   TextEditingController songname = TextEditingController();
   TextEditingController artistname = TextEditingController();
 
@@ -65,7 +67,6 @@ class _UploadMusicState extends State<UploadMusic> {
       "audio_url": audio_down_url.toString(),
       "image_url": image_down_url.toString(),
     };
-
     firestoreInstance.collection("audios").document().setData(data);
   }
 
@@ -98,122 +99,144 @@ class _UploadMusicState extends State<UploadMusic> {
             ],
           ),
         ),
-        child: ListView(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(top: 40),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    width: 300.0,
-                    height: 80.0,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
-                      ),
-                      onPressed: () => selectImage(),
-                      child: Text(
-                        "Selecione a capa",
-                        style: TextStyle(
-                          color: Colors.deepPurple,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Text(
-                    imageFileName,
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 12.0),
-                    child: SizedBox(
-                      width: 300.0,
-                      height: 80.0,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(primary: Colors.white),
-                        onPressed: () => selectSong(),
-                        child: Text(
-                          "Selecione a música",
-                          style: TextStyle(
-                            color: Colors.deepPurple,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Text(
-                    audioFileName,
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 30.0),
-                    child: Container(
-                      width: 300,
-                      child: TextField(
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                        controller: songname,
-                        decoration: InputDecoration(
-                          labelText: 'Nome da música:',
-                          labelStyle: TextStyle(
-                            color: Colors.white,
-                          ),
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 30.0),
-                    child: Container(
-                      width: 300,
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                        controller: artistname,
-                        decoration: InputDecoration(
-                          labelText: 'Nome do artista',
-                          labelStyle: TextStyle(
-                            color: Colors.white,
-                          ),
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 30.0),
-                    child: SizedBox(
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 40),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
                       width: 300.0,
                       height: 80.0,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           primary: Colors.white,
                         ),
-                        onPressed: () => finalUpload(),
+                        onPressed: () => selectImage(),
                         child: Text(
-                          'Salvar',
+                          "Selecione a capa",
                           style: TextStyle(
                             color: Colors.deepPurple,
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    Text(
+                      imageFileName,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 12.0),
+                      child: SizedBox(
+                        width: 300.0,
+                        height: 80.0,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                          ),
+                          onPressed: () => selectSong(),
+                          child: Text(
+                            "Selecione a música",
+                            style: TextStyle(
+                              color: Colors.deepPurple,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      audioFileName,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 30.0),
+                      child: Container(
+                        width: 300,
+                        child: TextFormField(
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                          controller: songname,
+                          decoration: InputDecoration(
+                            labelText: 'Nome da música:',
+                            labelStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'A música deve ter um nome!';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 30.0),
+                      child: Container(
+                        width: 300,
+                        child: TextFormField(
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          controller: artistname,
+                          decoration: InputDecoration(
+                            labelText: 'Nome do artista',
+                            labelStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (String value) {
+                            if (value == null || value.isEmpty) {
+                              return 'O nome do artista é necessário';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 30.0),
+                      child: SizedBox(
+                        width: 300.0,
+                        height: 80.0,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                          ),
+                          onPressed: () {
+                            if (_formKey.currentState.validate()) {
+                              finalUpload();
+                              Navigator.of(context).pop();
+                            }
+                          },
+                          child: Text(
+                            'Salvar',
+                            style: TextStyle(
+                              color: Colors.deepPurple,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

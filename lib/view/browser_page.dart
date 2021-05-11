@@ -27,6 +27,12 @@ class _BrowserPageState extends State<BrowserPage> {
         } else {
           return Scaffold(
             appBar: AppBar(
+              title: Text(
+                'Playlist',
+                style: TextStyle(
+                  color: Colors.deepPurple,
+                ),
+              ),
               automaticallyImplyLeading: false,
               iconTheme: IconThemeData(
                 color: Colors.deepPurple,
