@@ -1,6 +1,5 @@
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class MusicApp extends StatefulWidget {
@@ -96,6 +95,10 @@ class _MusicAppState extends State<MusicApp> {
         actions: [
           IconButton(
             onPressed: () {
+              if (playing == true) {
+                playing = false;
+                audioPlayer.pause();
+              }
               Navigator.pop(context);
             },
             icon: Icon(Icons.home),
